@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VS Code Portfolio
+
+A developer portfolio website designed to look and feel like Visual Studio Code. This project showcases my skills as a developer while providing a unique and interactive user experience.
+
+![VS Code Portfolio Screenshot](public/screenshot.png)
+
+## Features
+
+- **VS Code UI**: Authentic Visual Studio Code interface with a sidebar, file explorer, tabs, and command palette
+- **Dark Mode**: Dark theme by default with support for theme switching
+- **Interactive Navigation**: Navigate through different sections of the portfolio as if browsing files in VS Code
+- **Command Palette**: Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) to open the command palette
+- **Terminal Interface**: Interactive terminal on the homepage with custom commands
+- **Responsive Design**: Looks great on devices of all sizes
+- **AI Chatbot**: An interactive AI assistant to answer questions
+- **Smooth Animations**: Polished transitions and interactions using Framer Motion
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Icons**: Lucide React
+- **Animations**: Framer Motion
+- **Theming**: next-themes
+- **Analytics**: Vercel Analytics
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18.17 or later
+- npm or yarn or pnpm
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/vscode-portfolio.git
+   cd vscode-portfolio
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn
+   # or
+   pnpm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Project Structure
+
+```
+├── app                 # Next.js app router pages
+│   ├── about           # About me section
+│   ├── projects        # Projects showcase
+│   ├── blog            # Blog posts
+│   ├── contact         # Contact form
+│   └── chat            # AI chatbot
+├── components          # React components
+│   ├── ui              # UI components from shadcn/ui
+│   └── vscode          # VS Code-themed components
+├── lib                 # Utility functions
+├── public              # Static assets
+└── styles              # Global styles
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Customization
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Personal Information
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edit the content in the various page files to customize the portfolio with your information:
 
-## Learn More
+- `app/about/page.tsx` - Your bio and background
+- `app/about/skills/page.tsx` - Your technical skills
+- `app/projects/*/page.tsx` - Your projects
+- `app/contact/page.tsx` - Your contact information
 
-To learn more about Next.js, take a look at the following resources:
+### Styling
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project uses Tailwind CSS for styling. You can customize the appearance by:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Modifying the theme in `tailwind.config.js`
+2. Editing component styles in their respective files
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The easiest way to deploy your portfolio is using the [Vercel Platform](https://vercel.com/new).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Acknowledgments
+
+- Inspired by Visual Studio Code
+- UI components from [shadcn/ui](https://ui.shadcn.com)
+- Icons from [Lucide Icons](https://lucide.dev)
