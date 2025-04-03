@@ -60,7 +60,7 @@ export default function ProjectPage() {
                 <p className="text-white text-base sm:text-xl font-medium">Bablue AI Interface</p>
               </div>
               <Image 
-                src="/icons/image1.png" 
+                src="/icons/bablue.png" 
                 alt="Bablue AI" 
                 layout="fill" 
                 objectFit="cover" 
@@ -79,6 +79,8 @@ export default function ProjectPage() {
                 <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs">Node.js</span>
                 <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs">MongoDB</span>
                 <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs">Gemini API</span>
+                <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs">Clerk</span>
+                <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs">TypeScript</span>
               </div>
             </CardContent>
             <CardFooter className="flex flex-col sm:flex-row gap-3 sm:justify-between">
