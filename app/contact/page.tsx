@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Mail, User, MessageSquare, Send, Github, Linkedin } from "lucide-react"
+import axios from "axios"
 
 export default function ContactPage() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
@@ -47,19 +48,28 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    
+  
+    try {
+      const response = await axios.post("/api/send-email", formState)
+  
+      if (response.status === 200) {
+        setSubmitSuccess(true)
+        setFormState({ name: "", email: "", message: "" })
+      } else {
+        console.error("Error sending email:", response.data)
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err)
+    }
+  
     setIsSubmitting(false)
-    setSubmitSuccess(true)
-    setFormState({ name: "", email: "", message: "" })
-    
+  
     // Reset success message after 3 seconds
     setTimeout(() => {
       setSubmitSuccess(false)
     }, 3000)
   }
+  
   
   return (
     <VSCodeLayout>
@@ -181,8 +191,6 @@ export default function ContactPage() {
                   <span>github.com/abhijeet8080</span>
                 </a>
                 
-                
-                
                 <a 
                   href="https://www.linkedin.com/in/abhijeetkadam21/" 
                   target="_blank" 
@@ -194,34 +202,9 @@ export default function ContactPage() {
                 </a>
               </div>
             </div>
-            
-            <div className="bg-muted p-4 sm:p-6 rounded-lg space-y-3 sm:space-y-4">
-              <h2 className="text-lg sm:text-xl font-semibold">Office Hours</h2>
-              <p className="text-muted-foreground text-sm sm:text-base">
-                I&apos;m typically available for meetings and inquiries during these hours:
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
-                <div className="flex flex-col">
-                  <span className="font-medium">Monday - Friday</span>
-                  <span className="text-muted-foreground">9:00 AM - 5:00 PM</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-medium">Saturday</span>
-                  <span className="text-muted-foreground">By appointment</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-medium">Sunday</span>
-                  <span className="text-muted-foreground">Closed</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-medium">Timezone</span>
-                  <span className="text-muted-foreground">Eastern Time (ET)</span>
-                </div>
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>
     </VSCodeLayout>
   )
-} 
+}

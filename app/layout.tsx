@@ -18,14 +18,18 @@ export const metadata: Metadata = {
   title: "Abhijeet Kadam Portfolio",
   description: "A VS Code-themed developer portfolio",
   icons: {
-    icon: '/favicon.ico',
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
+    icon: [
+      { url: '/favicon.ico' }
+    ]
   }
 };
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 export default function RootLayout({
   children,
