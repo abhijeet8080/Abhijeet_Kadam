@@ -22,7 +22,7 @@ const commands: CommandItem[] = [
   // Pages
   { id: "home", name: "Go to Home", path: "/", icon: <Code className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "about", name: "Go to About", path: "/about", icon: <Info className="h-4 w-4 mr-2" />, section: "Pages" },
-  { id: "projects", name: "Go to Projects", path: "/projects/1", icon: <File className="h-4 w-4 mr-2" />, section: "Pages" },
+  { id: "projects", name: "Go to Projects", path: "/projects/bablue", icon: <File className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "contact", name: "Go to Contact", path: "/contact", icon: <Mail className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "chat", name: "Open Chat", path: "/chat", icon: <MessageSquare className="h-4 w-4 mr-2" />, section: "Pages" },
   

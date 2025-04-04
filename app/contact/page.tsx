@@ -50,7 +50,7 @@ export default function ContactPage() {
     setIsSubmitting(true)
   
     try {
-      const response = await axios.post("/api/send-email", formState)
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_SITE_URL}/api/send-email`, formState)
   
       if (response.status === 200) {
         setSubmitSuccess(true)
