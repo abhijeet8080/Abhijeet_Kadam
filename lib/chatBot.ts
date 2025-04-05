@@ -3,8 +3,8 @@ import axios from 'axios';
 
 export async function sendMessageToAI(message: string): Promise<string> {
   try {
-    // const response = await axios.post(`${process.env.NEXT_PUBLIC_SITE_URL}/api/chat`, { message });
-    const response = await axios.post(`/api/chat`, { message });
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_SITE_URL}/api/chat`, { message });
+    // const response = await axios.post(`/api/chat`, { message });
     console.log("Frontend AI RESPONSE: ",response.data)
     return response.data.reply;
   } catch (error) {
