@@ -1,8 +1,6 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown"
-
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm"; 
 import { cn } from "@/lib/utils";
 
 interface TypingAnimationProps {
@@ -32,17 +30,25 @@ export function TypingAnimation({
     return () => {
       clearInterval(typingEffect);
     };
-  }, [text,duration, i]);
+  }, [text, duration, i]);
 
   return (
-    <div
-    className={cn(
-      "text-sm font-medium leading-relaxed tracking-tight",
-      className
-    )}
-  >
-    <ReactMarkdown>{displayedText ? displayedText : text}</ReactMarkdown>
-  </div>
-  
+    <div className={cn("text-sm font-medium leading-relaxed tracking-tight", className)}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]} 
+        components={{
+          a: ({ ...props }) => (
+            <a
+              {...props}
+              className="text-blue-600 underline hover:text-blue-800"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          ),
+        }}
+      >
+        {displayedText ? displayedText : text}
+      </ReactMarkdown>
+    </div>
   );
 }

@@ -51,8 +51,8 @@ export default function ContactPage() {
     setErrorMessage("")
   
     try {
-      // const { data } = await axios.post("/api/contact", formState)
-      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_SITE_URL}/api/contact`, formState)
+      const { data } = await axios.post("/api/contact", formState)
+      // const { data } = await axios.post(`${process.env.NEXT_PUBLIC_SITE_URL}/api/contact`, formState)
   
       if (data.success) {
         setSubmitSuccess(true)
