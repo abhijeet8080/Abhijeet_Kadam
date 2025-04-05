@@ -1,5 +1,5 @@
 "use client"
-
+import axios from "axios"
 import React, { useState, useEffect } from "react"
 import { VSCodeLayout } from "@/components/vscode/layout"
 import { CommandPalette } from "@/components/vscode/command-palette"
@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Mail, User, MessageSquare, Send, Github, Linkedin } from "lucide-react"
-import axios from "axios"
 
 export default function ContactPage() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
@@ -20,6 +19,7 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
   
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -48,26 +48,28 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setErrorMessage("")
   
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_SITE_URL}/api/send-email`, formState)
+      // const { data } = await axios.post("/api/contact", formState)
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_SITE_URL}/api/contact`, formState)
   
-      if (response.status === 200) {
+      if (data.success) {
         setSubmitSuccess(true)
         setFormState({ name: "", email: "", message: "" })
       } else {
-        console.error("Error sending email:", response.data)
+        setErrorMessage(data.error || "Something went wrong.")
       }
-    } catch (err) {
-      console.error("Unexpected error:", err)
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
+      setErrorMessage(error.response?.data?.error || "Error sending message.")
+    } finally {
+      setIsSubmitting(false)
+  
+      if (submitSuccess) {
+        setTimeout(() => setSubmitSuccess(false), 3000)
+      }
     }
-  
-    setIsSubmitting(false)
-  
-    // Reset success message after 3 seconds
-    setTimeout(() => {
-      setSubmitSuccess(false)
-    }, 3000)
   }
   
   
@@ -163,6 +165,16 @@ export default function ContactPage() {
                   animate={{ opacity: 1, height: "auto" }}
                 >
                   Message sent successfully! I&apos;ll get back to you soon.
+                </motion.div>
+              )}
+              
+              {errorMessage && (
+                <motion.div 
+                  className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300 p-3 rounded text-sm"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                >
+                  {errorMessage}
                 </motion.div>
               )}
             </form>

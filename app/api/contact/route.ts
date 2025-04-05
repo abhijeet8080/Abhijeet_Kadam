@@ -1,41 +1,26 @@
-import { NextResponse } from "next/server";
-import nodemailer from 'nodemailer'
-// Load environment variables
-const userEmail = process.env.EMAIL_USER;
-const emailPassword = process.env.EMAIL_PASS;
-const recipientEmail = process.env.RECIPIENT_EMAIL; 
+import { NextResponse } from "next/server"
+import { sendMailRequest } from "@/lib/sendMail"
 
 export async function POST(req: Request) {
+  const { name, email, message } = await req.json()
+
+  const mailHTML = `
+    <h2>New Contact Form Submission</h2>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Message:</strong><br/>${message}</p>
+  `
+
   try {
-    const { name, email, message } = await req.json();
+    await sendMailRequest({
+      from: process.env.SMTP_MAIL || "",
+      to: process.env.RECIPIENT_EMAIL || "", 
+      subject: "Contact Form Submission",
+      html: mailHTML,
+    })
 
-    // Configure Nodemailer transporter
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: userEmail,
-        pass: emailPassword,
-      },
-    });
-
-    // Email content
-    const mailOptions = {
-      from: `"Contact Form" <${userEmail}>`,
-      to: recipientEmail, // Your email
-      subject: "New Contact Form Submission",
-      text: `You have received a new message:
-      
-      Name: ${name}
-      Email: ${email}
-      Message: ${message}`,
-    };
-
-    // Send email
-    await transporter.sendMail(mailOptions);
-
-    return NextResponse.json({ success: true, message: "Email sent successfully!" }, { status: 200 });
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error sending email:", error);
-    return NextResponse.json({ error: "Failed to send email." }, { status: 500 });
+    return NextResponse.json({ success: false, error: `Failed to send email: ${error}` }, { status: 500 })
   }
 }

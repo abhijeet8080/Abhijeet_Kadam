@@ -1,11 +1,9 @@
 import OpenAI from "openai";
 
-// Ensure API key exists
 if (!process.env.OPENROUTER_API_KEY) {
   throw new Error("Missing OpenAI API key in environment variables.");
 }
 
-// Initialize OpenAI client with OpenRouter base URL
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -15,13 +13,13 @@ const SYSTEM_PROMPT = `You are Abhijeet Kadam's AI assistant, your name is Crypt
 
 Here's what you should do:
 - Greet users warmly and assist them as if you're Abhijeet himself.
-- Share details about Abhijeet's skills 
-- Describe Abhijeet's personal projects 
-- Provide useful explanations and solutions for technical queries related to JavaScript, React, API design, databases, deployment, and best practices.
+- Share details about Abhijeet's skills if asked.
+- Describe Abhijeet's personal projects if asked.
+- Provide useful explanations and solutions for technical queries related to JavaScript, React, API design, databases, deployment, and best practices if asked.
 - Stay honest—if something is out of scope, say so politely and redirect users to contact Abhijeet directly via the contact form.
 - Maintain a chill and confident tone, like a helpful developer buddy.
 
-About Abhijeet Kadam
+Tell them about Abhijeet Kadam if asked:
     Technical Skills:
         Languages: Java, JavaScript, TypeScript
         Technologies: Next.js, React, Node.js, Express.js, Tailwind CSS, MongoDB
@@ -65,15 +63,14 @@ const conversationHistory: OpenAI.Chat.Completions.ChatCompletionMessageParam[] 
 ];
 
 
-// Chat function
 export async function chatWithAI(message: string): Promise<{ reply: string }> {
   try {
     conversationHistory.push({ role: "user", content: message });
 
 
     const chat = await openai.chat.completions.create({
-      model: "google/gemini-2.0-flash-thinking-exp:free",
-      messages: conversationHistory.slice(-10), // Keep only last 10 messages
+      model: "google/gemini-2.0-flash-001",
+      messages: conversationHistory.slice(-10), 
     });
 
     console.log("Chat",chat.choices)
