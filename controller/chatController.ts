@@ -80,6 +80,8 @@ export async function chatWithAI(message: string): Promise<{ reply: string }> {
       console.error("No content in AI response.");
       return { reply: "Hmm, I didn't get a response. Try again?" };
     }
+    conversationHistory.push({ role: "assistant", content: reply });
+
 
     return { reply };
   } catch (error) {
