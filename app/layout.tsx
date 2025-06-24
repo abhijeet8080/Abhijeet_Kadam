@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Abhijeet Kadam Portfolio",
-  description: "A VS Code-themed developer portfolio",
+  title: "Abhijeet Kadam — Engineer, Builder, Creator",
+  description: "Explore the tabs of my dev journey, one project at a time",
   icons: {
     icon: [
       { url: '/favicon.ico' }

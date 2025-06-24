@@ -42,8 +42,10 @@ export default function Home() {
           </h1>
           
           <p className="text-lg text-muted-foreground text-center max-w-3xl">
-            This portfolio is designed to look and feel like Visual Studio Code.
-            Use the sidebar to navigate or type commands in the terminal below.
+            Welcome to my code editor, where my portfolio lives and breathes like VS Code itself. 
+            Use the sidebar to explore — or type commands in the terminal like a real dev.
+
+
           </p>
           
           <div className="w-full max-w-3xl">
