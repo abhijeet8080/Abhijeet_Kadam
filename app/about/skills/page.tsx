@@ -30,6 +30,16 @@ const skills = {
     
     
   ],
+  web3:[
+    "Solidity",
+    "Ethereum",
+    "Smart Contracts",  
+    "Ethers.js",
+    "Hardhat",
+    "Wagmi",
+    "Viem",
+
+  ],
   tools: [
     "Git & GitHub",
     "VS Code",
@@ -123,6 +133,20 @@ export default function SkillsPage() {
                 <React.Fragment key={skill}>
                   <span className="pl-12 text-green-400">&quot;{skill}&quot;</span>
                   {index < skills.backend.length - 1 && <span className="text-white">,</span>}
+                  {"\n"}
+                </React.Fragment>
+              ))}
+              <span className="text-blue-400 pl-8">]</span>
+              <span className="text-white">,</span>
+              {"\n"}
+              <span className="text-yellow-400 pl-8">&quot;web3&quot;</span>
+              <span className="text-white">: </span>
+              <span className="text-blue-400">[</span>
+              {"\n"}
+              {skills.web3.map((skill, index) => (
+                <React.Fragment key={skill}>
+                  <span className="pl-12 text-green-400">&quot;{skill}&quot;</span>
+                  {index < skills.web3.length - 1 && <span className="text-white">,</span>}
                   {"\n"}
                 </React.Fragment>
               ))}

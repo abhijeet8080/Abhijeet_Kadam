@@ -86,11 +86,11 @@ export default function ProjectPage() {
             <CardFooter className="flex flex-col sm:flex-row gap-3 sm:justify-between">
               <Button variant="outline" size="sm" className="w-full sm:w-auto gap-2">
                 <Github className="h-4 w-4" />
-                <a href="https://github.com/abhijeet8080/Bablue---An-AI-Agent">Source Code</a>
+                <a href="https://github.com/abhijeet8080/Bablue---An-AI-Agent" target="_blank">Source Code</a>
               </Button>
               <Button size="sm" className="w-full sm:w-auto gap-2">
                 <ExternalLink className="h-4 w-4" />
-                <a href="https://bablue-an-ai-agent.vercel.app/">Live Demo</a>
+                <a href="https://bablue-an-ai-agent.vercel.app/" target="_blank">Live Demo</a>
               </Button>
             </CardFooter>
           </Card>

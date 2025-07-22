@@ -65,6 +65,13 @@ const files: FileItem[] = [
         path: "/projects/chatwave",
         icon: <File className="h-4 w-4 text-yellow-400" />
       },
+      {
+        id: "project-4",
+        name: "blockmind.jsx",
+        type: "file",
+        path: "/projects/blockmind",
+        icon: <File className="h-4 w-4 text-yellow-400" />
+      },
     ]
   },
   

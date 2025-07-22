@@ -86,19 +86,19 @@ export default function ProjectPage() {
             <CardFooter className="flex flex-col sm:flex-row gap-3 sm:justify-between">
               <Button variant="outline" size="sm" className="w-full sm:w-auto gap-2">
                 <Github className="h-4 w-4" />
-                <a href="https://github.com/abhijeet8080/ChatApp  ">Source Code</a>
+                <a href="https://github.com/abhijeet8080/ChatApp  " target="_blank">Source Code</a>
               </Button>
               <Button size="sm" className="w-full sm:w-auto gap-2">
                 <ExternalLink className="h-4 w-4" />
-                <a href="https://chat-app-frontend-eta-fawn.vercel.app/">Live Demo</a>
+                <a href="https://chat-app-frontend-eta-fawn.vercel.app/" target="_blank">Live Demo</a>
               </Button>
             </CardFooter>
           </Card>
           
           <div className="flex justify-between items-center mt-3 sm:mt-6">
-            <Link href='/projects/convocloud'><Button variant="outline" size="sm" className="text-xs sm:text-sm" disabled>Previous Project</Button></Link>
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2">
-              <Link href="/projects/bablue">Next Project</Link>
+            <Link href='/projects/convocloud'><Button variant="outline" size="sm" className="text-xs sm:text-sm" >Previous Project</Button></Link>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2" >
+              <Link href="/projects/blockmind" >Next Project</Link>
             </Button>
           </div>
         </motion.div>

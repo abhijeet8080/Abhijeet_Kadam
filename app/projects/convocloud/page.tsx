@@ -81,19 +81,21 @@ export default function ProjectPage() {
             <CardFooter className="flex flex-col sm:flex-row gap-3 sm:justify-between">
               <Button variant="outline" size="sm" className="w-full sm:w-auto gap-2">
                 <Github className="h-4 w-4" />
-                <a href="https://github.com/abhijeet8080/ConvoCloud">Source Code</a>
+                <a href="https://github.com/abhijeet8080/ConvoCloud" target="_blank">Source Code</a>
               </Button>
               <Button size="sm" className="w-full sm:w-auto gap-2">
                 <ExternalLink className="h-4 w-4" />
-                <a href="https://convo-cloud-woad.vercel.app/">Live Demo</a>
+                <a href="https://convo-cloud-woad.vercel.app/" target="_blank">Live Demo</a>
               </Button>
             </CardFooter>
           </Card>
           
           <div className="flex justify-between items-center mt-3 sm:mt-6">
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm" disabled>Previous Project</Button>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm" >
+              <Link href={`/projects/bablue`}>Previous Project</Link>
+            </Button>
             <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2">
-              <Link href="/projects/convocloud">Next Project</Link>
+              <Link href="/projects/chatwave">Next Project</Link>
             </Button>
           </div>
         </motion.div>
