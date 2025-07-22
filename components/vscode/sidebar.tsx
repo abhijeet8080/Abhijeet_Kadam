@@ -44,6 +44,7 @@ const files: FileItem[] = [
     name: "Projects",
     type: "folder", 
     children: [
+      
       {
         id: "project-1",
         name: "bablue.jsx",
@@ -70,6 +71,13 @@ const files: FileItem[] = [
         name: "blockmind.jsx",
         type: "file",
         path: "/projects/blockmind",
+        icon: <File className="h-4 w-4 text-yellow-400" />
+      },
+      {
+        id: "project-5",
+        name: "jarvis.jsx",
+        type: "file",
+        path: "/projects/jarvis",
         icon: <File className="h-4 w-4 text-yellow-400" />
       },
     ]
