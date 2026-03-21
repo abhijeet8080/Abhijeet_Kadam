@@ -95,13 +95,7 @@ This project uses Tailwind CSS for styling. You can customize the appearance by:
 1. Modifying the theme in `tailwind.config.js`
 2. Editing component styles in their respective files
 
-## Deployment
 
-The easiest way to deploy your portfolio is using the [Vercel Platform](https://vercel.com/new).
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
