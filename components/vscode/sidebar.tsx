@@ -107,7 +107,6 @@ interface FileItemProps {
 const FileItemComponent = ({ item, level = 0 }: FileItemProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
-  console.log('add a log to test bugbot')
   const handleClick = () => {
     if (item.type === "folder") {
       setIsOpen(!isOpen)
