@@ -96,9 +96,11 @@ export default function ProjectPage() {
           </Card>
           
           <div className="flex justify-between items-center mt-3 sm:mt-6">
-            <Link href='/projects/convocloud'><Button variant="outline" size="sm" className="text-xs sm:text-sm" >Previous Project</Button></Link>
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2" >
-              <Link href="/projects/blockmind" >Next Project</Link>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm" asChild>
+              <Link href="/projects/bablue">Previous Project</Link>
+            </Button>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2" asChild>
+              <Link href="/projects/voice-agent">Next Project</Link>
             </Button>
           </div>
         </motion.div>

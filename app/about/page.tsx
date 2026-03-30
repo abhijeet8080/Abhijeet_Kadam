@@ -9,7 +9,6 @@ import { KeyboardEvent } from "react";
 export default function AboutPage() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
-  // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "P") {
@@ -36,36 +35,60 @@ export default function AboutPage() {
           transition={{ duration: 0.5 }}
         >
           <div className="prose dark:prose-invert text-base sm:text-lg max-w-full">
-            <h1 className="text-3xl md:text-4xl font-bold text-blue-400">👨‍💻 About Me</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-blue-400">About Me</h1>
             <p>
-              Hey there! I&apos;m <strong className="text-blue-300">Abhijeet Kadam</strong>, a full-stack developer who thrives on crafting elegant, high-performance web applications. With a passion for clean code and user-centric design, I build experiences that are both intuitive and visually compelling.
+              I build AI systems that work in production — not demos. I&apos;m Abhijeet Kadam, Full
+              Stack AI Engineer at AEOS Labs (Sept 2025 – Present), where I ship distributed
+              backends, AI automation pipelines, and cloud infrastructure on Azure. Most recently: an
+              autonomous PR review agent that posts inline GitHub suggestions, and a real-time voice
+              receptionist that handles inbound phone calls end-to-end — both running in production.
             </p>
 
-            <blockquote className="border-l-4 border-blue-500 pl-4 italic text-blue-200">
-              <p>&quot;Great software is the perfect harmony of aesthetics, functionality, and performance.&quot;</p>
-            </blockquote>
+            <div className="not-prose font-mono text-xs sm:text-sm text-cyan-600/90 dark:text-cyan-400/90 my-4 space-y-0.5 border-l-2 border-cyan-500/40 pl-3">
+              <p className="m-0">{"// currently: Full Stack AI Engineer @ AEOS Labs"}</p>
+              <p className="m-0">{"// prev: BugBot · Voice Agent · Industrial Motion"}</p>
+              <p className="m-0">{"// stack: TypeScript · Azure · Gemini · BullMQ · Hono"}</p>
+            </div>
 
-            <h2 className="text-2xl md:text-3xl font-semibold text-blue-400">🚀 My Journey</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold text-blue-400">Background</h2>
             <p>
-              My fascination with technology began with a simple website I created years ago. That spark turned into an obsession with building scalable, impactful digital solutions. Today, I specialize in modern JavaScript frameworks, primarily React and Next.js, while also working across the full stack to create seamless applications.
+              I hold a <strong>BTech in Electronics &amp; Telecommunications from VIIT</strong> with{" "}
+              <strong>8.93 CGPA</strong>, graduated <strong>May 2025</strong>. That path went from
+              circuits to full-stack web to AI-augmented systems — automating RFQs that used to take
+              48 hours, building voice agents that handle real phone calls, and shipping a PR review
+              bot that operates across repositories without human intervention.
             </p>
 
-            <h2 className="text-2xl md:text-3xl font-semibold text-blue-400">💡 What I Do</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold text-blue-400">What I focus on</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Design and build intuitive, accessible user interfaces</li>
-              <li>Develop robust APIs and scalable backend services</li>
-              <li>Optimize application performance for lightning-fast experiences</li>
-              <li>Ensure security and data integrity in web applications</li>
-              <li>Collaborate with teams to deliver cutting-edge digital products</li>
+              <li>
+                Distributed backends and job queues — BullMQ + Redis + KEDA powering RFQ automation at
+                AEOS
+              </li>
+              <li>
+                AI pipelines — 3-stage GPT review in BugBot, dual-architecture voice AI with Gemini
+                Live
+              </li>
+              <li>
+                Developer experience: TypeScript monorepos, CI/CD to Azure Container Apps, code
+                review tooling
+              </li>
+              <li>
+                Interfaces that stay fast whether web or telephony — sub-800ms voice response latency
+                in production
+              </li>
             </ul>
 
-            <h2 className="text-2xl md:text-3xl font-semibold text-blue-400">🌟 Beyond Coding</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold text-blue-400">Beyond the keyboard</h2>
             <p>
-              When I&apos;m not immersed in code, I&apos;m out exploring nature, experimenting with new recipes, or diving into tech blogs and books. I believe that creativity stems from diverse experiences, and I love bringing that mindset into my work.
+              I recharge by exploring nature, cooking, and keeping up with engineering blogs. Diverse
+              interests feed how I design systems — practical, calm under load, and easy for others to
+              extend.
             </p>
 
             <p>
-              I&apos;m always open to exciting projects and collaborations. Let&apos;s connect and create something extraordinary!
+              I&apos;m open to meaningful collaborations. Reach out via the contact page or say hi in
+              the AI chat — let&apos;s build something solid.
             </p>
           </div>
         </motion.div>

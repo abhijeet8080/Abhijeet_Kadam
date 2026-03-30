@@ -91,11 +91,11 @@ export default function ProjectPage() {
           </Card>
           
           <div className="flex justify-between items-center mt-3 sm:mt-6">
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm" >
-              <Link href={`/projects/bablue`}>Previous Project</Link>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm" asChild>
+              <Link href="/projects/bugbot">Previous Project</Link>
             </Button>
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2">
-              <Link href="/projects/chatwave">Next Project</Link>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2" asChild>
+              <Link href="/projects/blockmind">Next Project</Link>
             </Button>
           </div>
         </motion.div>

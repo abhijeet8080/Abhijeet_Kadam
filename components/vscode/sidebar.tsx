@@ -13,6 +13,8 @@ type FileItem = {
   icon?: React.ReactNode
   path?: string
   children?: FileItem[]
+  /** When true, folder starts expanded (top-level About / Projects) */
+  defaultOpen?: boolean
 }
 
 // Sample file structure - these represent our portfolio sections
@@ -21,6 +23,7 @@ const files: FileItem[] = [
     id: "about",
     name: "About",
     type: "folder",
+    defaultOpen: true,
     children: [
       {
         id: "about-me",
@@ -36,50 +39,70 @@ const files: FileItem[] = [
         path: "/about/skills",
         icon: <File className="h-4 w-4 text-yellow-400" />
       },
-      
+      {
+        id: "experience",
+        name: "experience.ts",
+        type: "file",
+        path: "/about/experience",
+        icon: <File className="h-4 w-4 text-cyan-400" />
+      },
     ]
   },
   {
     id: "projects",
     name: "Projects",
-    type: "folder", 
+    type: "folder",
+    defaultOpen: true,
     children: [
-      
       {
-        id: "project-1",
-        name: "bablue.jsx",
+        id: "project-voice-agent",
+        name: "voice-agent.tsx",
         type: "file",
-        path: "/projects/bablue",
+        path: "/projects/voice-agent",
         icon: <File className="h-4 w-4 text-yellow-400" />
       },
       {
-        id: "project-2",
-        name: "convocloud.jsx",
+        id: "project-bugbot",
+        name: "bugbot.tsx",
         type: "file",
-        path: "/projects/convocloud",
+        path: "/projects/bugbot",
         icon: <File className="h-4 w-4 text-yellow-400" />
       },
-      {
-        id: "project-3",
-        name: "chatwave.jsx",
-        type: "file",
-        path: "/projects/chatwave",
-        icon: <File className="h-4 w-4 text-yellow-400" />
-      },
-      {
-        id: "project-4",
-        name: "blockmind.jsx",
-        type: "file",
-        path: "/projects/blockmind",
-        icon: <File className="h-4 w-4 text-yellow-400" />
-      },
-      {
-        id: "project-5",
-        name: "jarvis.jsx",
-        type: "file",
-        path: "/projects/jarvis",
-        icon: <File className="h-4 w-4 text-yellow-400" />
-      },
+      // {
+      //   id: "project-convocloud",
+      //   name: "convocloud.jsx",
+      //   type: "file",
+      //   path: "/projects/convocloud",
+      //   icon: <File className="h-4 w-4 text-yellow-400" />
+      // },
+      // {
+      //   id: "project-blockmind",
+      //   name: "blockmind.jsx",
+      //   type: "file",
+      //   path: "/projects/blockmind",
+      //   icon: <File className="h-4 w-4 text-yellow-400" />
+      // },
+      // {
+      //   id: "project-bablue",
+      //   name: "bablue.jsx",
+      //   type: "file",
+      //   path: "/projects/bablue",
+      //   icon: <File className="h-4 w-4 text-yellow-400" />
+      // },
+      // {
+      //   id: "project-chatapp",
+      //   name: "chatapp.jsx",
+      //   type: "file",
+      //   path: "/projects/chatwave",
+      //   icon: <File className="h-4 w-4 text-yellow-400" />
+      // },
+      // {
+      //   id: "project-jarvis",
+      //   name: "jarvis.jsx",
+      //   type: "file",
+      //   path: "/projects/jarvis",
+      //   icon: <File className="h-4 w-4 text-yellow-400" />
+      // },
     ]
   },
   
@@ -105,9 +128,10 @@ interface FileItemProps {
 }
 
 const FileItemComponent = ({ item, level = 0 }: FileItemProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(
+    () => item.type === "folder" && item.defaultOpen === true
+  )
   const router = useRouter()
-  console.log('hello')
   const handleClick = () => {
     if (item.type === "folder") {
       setIsOpen(!isOpen)

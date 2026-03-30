@@ -19,7 +19,7 @@
 
 # production
 /build
-
+notepad
 # misc
 .DS_Store
 *.pem

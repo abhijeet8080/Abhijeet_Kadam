@@ -16,7 +16,8 @@ type Message = {
   id: string;
   content: string;
   isUser: boolean;
-  timestamp: Date;
+  /** Set after mount for welcome message to avoid SSR/client `Date` mismatch */
+  timestamp: Date | null;
 };
 
 export default function ChatPage() {
@@ -28,11 +29,24 @@ export default function ChatPage() {
       id: "welcome",
       content: "Hey there! 👋 Crypto here, Abhijeet Kadam's AI assistant. Nice to meet you! How can I help you today?",
       isUser: false,
-      timestamp: new Date(),
+      timestamp: null,
     },
   ]);
+  /** Avoid rendering locale-dependent times until client — matches SSR HTML */
+  const [timeReady, setTimeReady] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setTimeReady(true);
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === "welcome" && m.timestamp == null
+          ? { ...m, timestamp: new Date() }
+          : m
+      )
+    );
+  }, []);
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -171,16 +185,19 @@ export default function ChatPage() {
                         <TypingAnimation text={message.content} />
                       </div>
                     )}
-                    <div
-                      className={`text-xs mt-1 opacity-70 ${
-                        message.isUser ? "text-right" : ""
-                      }`}
-                    >
-                      {message.timestamp.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
+                    {timeReady && message.timestamp != null && (
+                      <div
+                        className={`text-xs mt-1 opacity-70 ${
+                          message.isUser ? "text-right" : ""
+                        }`}
+                        suppressHydrationWarning
+                      >
+                        {message.timestamp.toLocaleTimeString(undefined, {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>

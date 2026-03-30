@@ -8,7 +8,7 @@ import {
   DialogTitle
 } from "@/components/ui/dialog"
 import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { File, Code, User, Mail, MessageSquare, Info, Palette } from "lucide-react"
+import { File, Code, User, Mail, MessageSquare, Info, Palette, Briefcase, Bug, Mic } from "lucide-react"
 
 type CommandItem = {
   id: string
@@ -22,7 +22,10 @@ const commands: CommandItem[] = [
   // Pages
   { id: "home", name: "Go to Home", path: "/", icon: <Code className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "about", name: "Go to About", path: "/about", icon: <Info className="h-4 w-4 mr-2" />, section: "Pages" },
-  { id: "projects", name: "Go to Projects", path: "/projects/bablue", icon: <File className="h-4 w-4 mr-2" />, section: "Pages" },
+  { id: "experience", name: "Go to Experience", path: "/about/experience", icon: <Briefcase className="h-4 w-4 mr-2" />, section: "Pages" },
+  { id: "projects", name: "Go to Projects", path: "/projects/voice-agent", icon: <File className="h-4 w-4 mr-2" />, section: "Pages" },
+  { id: "bugbot", name: "Go to BugBot", path: "/projects/bugbot", icon: <Bug className="h-4 w-4 mr-2" />, section: "Pages" },
+  { id: "voice-agent", name: "Go to Voice Agent", path: "/projects/voice-agent", icon: <Mic className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "contact", name: "Go to Contact", path: "/contact", icon: <Mail className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "chat", name: "Open Chat", path: "/chat", icon: <MessageSquare className="h-4 w-4 mr-2" />, section: "Pages" },
   
@@ -31,7 +34,7 @@ const commands: CommandItem[] = [
   { id: "light-theme", name: "Switch to Light Theme", path: "", icon: <Palette className="h-4 w-4 mr-2" />, section: "Theme" },
   
   // Social Links
-  { id: "github", name: "Open GitHub", path: "https://github.com/abhhijeet8080", icon: <User className="h-4 w-4 mr-2" />, section: "Social" },
+  { id: "github", name: "Open GitHub", path: "https://github.com/abhijeet8080", icon: <User className="h-4 w-4 mr-2" />, section: "Social" },
   { id: "linkedin", name: "Open LinkedIn", path: "https://linkedin.com/in/abhijeetkadam21", icon: <User className="h-4 w-4 mr-2" />, section: "Social" },
 ]
 

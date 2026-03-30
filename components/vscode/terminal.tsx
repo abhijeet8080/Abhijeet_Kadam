@@ -81,11 +81,11 @@ export function Terminal({ welcomeMessage, className = "" }: TerminalProps) {
   
   // Custom commands
   const commands = {
-    help: () => "Available commands: help, about, skills, contact, projects, clear",
-    about: () => "I'm a passionate developer with experience in React, Next.js, and more. Check out the About section!",
-    skills: () => "My skills include: JavaScript, TypeScript, React, Next.js, Node.js, Tailwind CSS, and more.",
-    projects: () => "Check out my projects in the sidebar under Projects folder.",
-    // blog: () => "Read my latest thoughts on the Blog section.",
+    help: () => "Available commands: help, about, skills, experience, contact, projects, clear",
+    about: () => "I'm Abhijeet Kadam, Full Stack AI Engineer at AEOS Labs. Check the About tab for more.",
+    skills: () => "See skills.json under About — Azure, BullMQ, Hono, Prisma, Twilio, Gemini Live, and more.",
+    experience: () => "Open About → experience.ts in the sidebar (or /about/experience) for AEOS Labs — marketplace, RFQ AI, Azure, Graph, Prisma.",
+    projects: () => "Check Projects in the sidebar: Voice Agent, BugBot, ConvoCloud, BlockMind, Bablue, ChatApp.",
     contact: () => "Feel free to contact me through the Contact page or at kadamabhijeet021@gmail.com",
     clear: () => {
       setMessages([])

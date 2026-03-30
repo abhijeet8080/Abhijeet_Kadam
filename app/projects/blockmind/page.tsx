@@ -91,9 +91,9 @@ export default function ProjectPage() {
 
           <div className="flex justify-between items-center mt-3 sm:mt-6">
             <Button variant="outline" size="sm" className="text-xs sm:text-sm" asChild>
-              <Link href="/projects/chatwave">Previous Project</Link>
+              <Link href="/projects/convocloud">Previous Project</Link>
             </Button>
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2" disabled>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm gap-2" asChild>
               <Link href="/projects/bablue">Next Project</Link>
             </Button>
           </div>
