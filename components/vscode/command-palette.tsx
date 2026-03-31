@@ -24,6 +24,13 @@ const commands: CommandItem[] = [
   { id: "about", name: "Go to About", path: "/about", icon: <Info className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "experience", name: "Go to Experience", path: "/about/experience", icon: <Briefcase className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "projects", name: "Go to Projects", path: "/projects/voice-agent", icon: <File className="h-4 w-4 mr-2" />, section: "Pages" },
+  {
+    id: "resume",
+    name: "Download Resume",
+    path: "/resume.pdf",
+    icon: <File className="h-4 w-4 mr-2" />,
+    section: "Pages",
+  },
   { id: "bugbot", name: "Go to BugBot", path: "/projects/bugbot", icon: <Bug className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "voice-agent", name: "Go to Voice Agent", path: "/projects/voice-agent", icon: <Mic className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "contact", name: "Go to Contact", path: "/contact", icon: <Mail className="h-4 w-4 mr-2" />, section: "Pages" },

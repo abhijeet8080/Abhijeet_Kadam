@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/vscode/sidebar"
 import { Tabs } from "@/components/vscode/tabs"
 import { StatusBar } from "@/components/vscode/status-bar"
 import { ActivityBar } from "@/components/vscode/activity-bar"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 
 interface VSCodeLayoutProps {
   children: React.ReactNode
@@ -14,7 +14,8 @@ interface VSCodeLayoutProps {
 export function VSCodeLayout({ children }: VSCodeLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
-  
+  const [showHint, setShowHint] = useState(false)
+
   // Check viewport size on mount and when window resizes
   useEffect(() => {
     const checkScreenSize = () => {
@@ -34,19 +35,48 @@ export function VSCodeLayout({ children }: VSCodeLayoutProps) {
     // Clean up
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
-  
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (isMobile || window.innerWidth < 768) {
+      setShowHint(false)
+      return
+    }
+    const seen = localStorage.getItem("sidebar-hint-seen")
+    if (seen) return
+    setShowHint(true)
+    const t = setTimeout(() => {
+      setShowHint(false)
+      localStorage.setItem("sidebar-hint-seen", "1")
+    }, 4000)
+    return () => clearTimeout(t)
+  }, [isMobile])
+
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground">
       {/* Main content area with sidebar and editor */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="relative flex flex-1 overflow-hidden">
         {/* Activity bar (left side icons) */}
-        <ActivityBar 
+        <ActivityBar
           isSidebarOpen={isSidebarOpen}
           toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
-        
+
+        <AnimatePresence>
+          {showHint && (
+            <motion.div
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              className="absolute left-14 top-16 z-50 bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs font-mono px-3 py-2 rounded-md shadow-lg pointer-events-none"
+            >
+              ← explore from here
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Sidebar with file explorer */}
-        <motion.div 
+        <motion.div
           initial={{ width: isSidebarOpen ? (isMobile ? '100%' : 250) : 0 }}
           animate={{ width: isSidebarOpen ? (isMobile ? '100%' : 250) : 0 }}
           transition={{ duration: 0.2 }}

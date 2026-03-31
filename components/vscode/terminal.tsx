@@ -37,13 +37,18 @@ interface TerminalProps {
   className?: string
 }
 
+const defaultMessages = [
+  { text: "$ whoami", delay: 300 },
+  { text: "Abhijeet Kadam — Full Stack AI Engineer", delay: 800 },
+  { text: "$ cat focus.txt", delay: 1400 },
+  { text: "Voice AI · Backend Systems · Azure · TypeScript", delay: 1900 },
+  { text: "$ ls projects/", delay: 2500 },
+  { text: "voice-agent/    bugbot/    industrial-motion/", delay: 3000 },
+  { text: "─────────────────────────────────────────────", delay: 3500 },
+  { text: "Type 'help' for available commands.", delay: 3800 },
+]
+
 export function Terminal({ welcomeMessage, className = "" }: TerminalProps) {
-  const defaultMessages = [
-    { text: "Welcome to my Portfolio", delay: 300 },
-    { text: "I'm Abhijeet Kadam, I'm a full-stack developer passionate about creating amazing web experiences", delay: 1500 },
-    { text: "Feel free to explore using the sidebar or the command palette (Ctrl+Shift+P)", delay: 3000 },
-    { text: "Type 'help' for available commands", delay: 4500 },
-  ]
 
   const [messages, setMessages] = useState<string[]>([])
   const [input, setInput] = useState("")
@@ -82,15 +87,13 @@ export function Terminal({ welcomeMessage, className = "" }: TerminalProps) {
   // Custom commands
   const commands = {
     help: () => "Available commands: help, about, skills, experience, contact, projects, clear",
-    about: () => "I'm Abhijeet Kadam, Full Stack AI Engineer at AEOS Labs. Check the About tab for more.",
+    about: () =>
+      "Abhijeet Kadam · Full Stack AI Engineer @ AEOS Labs · Building AI systems in production.",
     skills: () => "See skills.json under About — Azure, BullMQ, Hono, Prisma, Twilio, Gemini Live, and more.",
     experience: () => "Open About → experience.ts in the sidebar (or /about/experience) for AEOS Labs — marketplace, RFQ AI, Azure, Graph, Prisma.",
-    projects: () => "Check Projects in the sidebar: Voice Agent, BugBot, ConvoCloud, BlockMind, Bablue, ChatApp.",
+    projects: () => "voice-agent/    bugbot/    (more coming soon)",
     contact: () => "Feel free to contact me through the Contact page or at kadamabhijeet021@gmail.com",
-    clear: () => {
-      setMessages([])
-      return ""
-    }
+    clear: () => "",
   }
   
   // Display welcome messages with typing animation
@@ -122,10 +125,18 @@ export function Terminal({ welcomeMessage, className = "" }: TerminalProps) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && input.trim()) {
       const command = input.trim().toLowerCase()
-      
+
+      if (command === "clear") {
+        setMessages([])
+        setCommandHistory((prev) => [input, ...prev].slice(0, 10))
+        setInput("")
+        setHistoryIndex(-1)
+        return
+      }
+
       // Add command to messages
       const newMessages = [...messages, `$ ${input}`]
-      
+
       // Process command
       if (command in commands) {
         const response = commands[command as keyof typeof commands]()
@@ -135,7 +146,7 @@ export function Terminal({ welcomeMessage, className = "" }: TerminalProps) {
       } else {
         newMessages.push(`Command not found: ${command}. Type 'help' for available commands.`)
       }
-      
+
       setMessages(newMessages)
       setCommandHistory(prev => [input, ...prev].slice(0, 10))
       setInput("")
@@ -161,43 +172,48 @@ export function Terminal({ welcomeMessage, className = "" }: TerminalProps) {
   }
   
   return (
-    <motion.div 
-      className={`bg-black/90 rounded-md p-2 sm:p-4 text-green-400 font-mono text-xs sm:text-sm overflow-hidden ${className}`}
+    <motion.div
+      className={`bg-black/90 rounded-md p-2 sm:p-4 text-green-400 font-mono text-xs sm:text-sm flex flex-col overflow-hidden min-h-0 ${className}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex items-center space-x-2 mb-2">
+      {/* Title bar — does not scroll with output */}
+      <div className="flex shrink-0 items-center space-x-2 pb-2 border-b border-white/10">
         <div className="h-2 w-2 sm:h-3 sm:w-3 bg-red-500 rounded-full" />
         <div className="h-2 w-2 sm:h-3 sm:w-3 bg-yellow-500 rounded-full" />
         <div className="h-2 w-2 sm:h-3 sm:w-3 bg-green-500 rounded-full" />
         <div className="text-xs text-gray-400 ml-2">Terminal</div>
       </div>
-      
-      <div className="space-y-1 pb-2 max-h-36 sm:max-h-60 overflow-y-auto custom-scrollbar">
+
+      {/* Scrollable output only */}
+      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 py-2">
         {messages.map((message, index) => (
           <div key={index} className="flex">
             {message.startsWith("$") ? (
               <>
-                <span className="text-blue-400 mr-1">$</span>
-                <span>{message.substring(1)}</span>
+                <span className="text-blue-400">$</span>
+                <span className="text-white">{message.substring(1)}</span>
               </>
+            ) : message.startsWith("─") ? (
+              <span className="text-gray-600">{message}</span>
             ) : (
-              <span>{message}</span>
+              <span className="text-green-300">{message}</span>
             )}
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
-      
-      <div className="flex items-center">
-        <ChevronRight className="h-4 w-4 mr-1 text-green-500" />
+
+      {/* Input row — stays pinned under the scroll region */}
+      <div className="flex shrink-0 items-center pt-2 border-t border-white/10">
+        <ChevronRight className="h-4 w-4 mr-1 text-green-500 shrink-0" />
         <input
           type="text"
           value={input}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent outline-none border-none text-green-400"
+          className="flex-1 min-w-0 bg-transparent outline-none border-none text-green-400"
           autoFocus
         />
       </div>
