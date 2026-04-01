@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Send, Bot } from "lucide-react";
-import { sendMessageToAI } from "@/lib/chatBot";
-import { TypingAnimation } from "@/components/ui/typing-animation";
+import { streamMessageToAI } from "@/lib/chatBot";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type Message = {
   id: string;
@@ -97,34 +98,50 @@ export default function ChatPage() {
     setInput("");
     setIsThinking(true);
 
-    try {
-      // Send message to our AI service
-      const aiResponseText = await sendMessageToAI(input.trim());
+    const aiId = `ai-${Date.now()}`;
 
-      // Create AI message with the response
-      const aiResponse: Message = {
-        id: `ai-${Date.now()}`,
-        content: aiResponseText,
-        isUser: false,
-        timestamp: new Date(),
-      };
+    try {
+      await streamMessageToAI(userMessage.content.trim(), (delta) => {
+        if (!delta) return;
+        setIsThinking(false);
+        setMessages((prev) => {
+          const has = prev.some((m) => m.id === aiId);
+          if (!has) {
+            return [
+              ...prev,
+              {
+                id: aiId,
+                content: delta,
+                isUser: false,
+                timestamp: new Date(),
+              },
+            ];
+          }
+          return prev.map((m) =>
+            m.id === aiId ? { ...m, content: m.content + delta } : m
+          );
+        });
+      });
 
       setIsThinking(false);
-      setMessages((prev) => [...prev, aiResponse]);
     } catch (error) {
       console.error("Error getting AI response:", error);
 
-      // Create error message
       const errorResponse: Message = {
         id: `ai-error-${Date.now()}`,
         content:
-          "Sorry, I encountered an error processing your request. Please try again later.",
+          error instanceof Error
+            ? error.message
+            : "Sorry, I encountered an error processing your request. Please try again later.",
         isUser: false,
         timestamp: new Date(),
       };
 
       setIsThinking(false);
-      setMessages((prev) => [...prev, errorResponse]);
+      setMessages((prev) => {
+        const withoutEmpty = prev.filter((m) => m.id !== aiId || m.content.length > 0);
+        return [...withoutEmpty, errorResponse];
+      });
     }
   };
 
@@ -181,8 +198,22 @@ export default function ChatPage() {
                     {message.isUser ? (
                       <p>{message.content}</p>
                     ) : (
-                      <div className="prose prose-base dark:prose-invert max-w-none leading-relaxed">
-                        <TypingAnimation text={message.content} />
+                      <div className="prose prose-base dark:prose-invert max-w-none leading-relaxed text-sm font-medium tracking-tight">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            a: ({ ...props }) => (
+                              <a
+                                {...props}
+                                className="text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              />
+                            ),
+                          }}
+                        >
+                          {message.content || " "}
+                        </ReactMarkdown>
                       </div>
                     )}
                     {timeReady && message.timestamp != null && (

@@ -1,4 +1,4 @@
-import { chatWithAI } from "@/controller/chatController";
+import { streamChatToAI } from "@/controller/chatController";
 
 const allowedOrigins = process.env.NEXT_PUBLIC_ALLOWED_ORIGINS?.split(",") || ["*"];
 
@@ -13,25 +13,52 @@ function getCorsHeaders(origin: string) {
   };
 }
 
+/** NDJSON stream: `{ "t": "delta" }` per line, then `{ "done": true }`, or `{ "error": "..." }`. */
 export async function POST(req: Request) {
   try {
     const origin = req.headers.get("origin") || "";
     const corsHeaders = getCorsHeaders(origin);
 
-    if (req.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: corsHeaders });
+    const body = await req.json();
+    const message = typeof body.message === "string" ? body.message.trim() : "";
+
+    if (!message) {
+      return new Response(JSON.stringify({ error: "Message is required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    const { message } = await req.json();
-    console.log("Message",message)
-    const response = await chatWithAI(message);
+    const encoder = new TextEncoder();
 
-    return new Response(JSON.stringify({ reply: response.reply }), {
+    const stream = new ReadableStream({
+      async start(controller) {
+        const send = (obj: Record<string, unknown>) => {
+          controller.enqueue(encoder.encode(`${JSON.stringify(obj)}\n`));
+        };
+
+        const result = await streamChatToAI(message, (delta) => {
+          send({ t: delta });
+        });
+
+        if (!result.ok) {
+          send({ error: result.error });
+        }
+        send({ done: true });
+        controller.close();
+      },
+    });
+
+    return new Response(stream, {
       status: 200,
-      headers: corsHeaders,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/x-ndjson; charset=utf-8",
+        "Cache-Control": "no-store",
+      },
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Chat route error:", error);
     return new Response(JSON.stringify({ error: "Invalid request" }), {
       status: 400,
       headers: { "Access-Control-Allow-Origin": "*" },

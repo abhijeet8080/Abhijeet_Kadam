@@ -70,30 +70,67 @@ let conversationHistory: GeminiTurn[] = [];
 
 const MAX_HISTORY_TURNS = 10;
 
-export async function chatWithAI(message: string): Promise<{ reply: string }> {
+export type StreamChatResult = { ok: true } | { ok: false; error: string };
+
+/**
+ * Streams Gemini chat output (see https://ai.google.dev/gemini-api/docs/text-generation#streaming-responses).
+ * Calls `onDelta` with each text chunk, then appends the full reply to `conversationHistory`.
+ */
+export async function streamChatToAI(
+  message: string,
+  onDelta: (delta: string) => void
+): Promise<StreamChatResult> {
   try {
     const chat = model.startChat({
       history: conversationHistory,
     });
 
-    const result = await chat.sendMessage(message);
-    const reply = result.response.text();
+    const result = await chat.sendMessageStream(message);
+    let fullReply = "";
 
-    if (!reply?.trim()) {
-      console.error("No content in Gemini response.");
-      return { reply: "Hmm, I didn't get a response. Try again?" };
+    for await (const chunk of result.stream) {
+      let piece = "";
+      try {
+        piece = chunk.text();
+      } catch {
+        continue;
+      }
+      if (piece) {
+        fullReply += piece;
+        onDelta(piece);
+      }
+    }
+
+    const final = await result.response;
+    if (!fullReply.trim()) {
+      try {
+        const t = final.text();
+        if (t?.trim()) {
+          fullReply = t;
+          onDelta(t);
+        }
+      } catch {
+        /* blocked or empty */
+      }
+    }
+
+    if (!fullReply?.trim()) {
+      return { ok: false, error: "Hmm, I didn't get a response. Try again?" };
     }
 
     conversationHistory.push({ role: "user", parts: [{ text: message }] });
-    conversationHistory.push({ role: "model", parts: [{ text: reply }] });
+    conversationHistory.push({ role: "model", parts: [{ text: fullReply }] });
 
     if (conversationHistory.length > MAX_HISTORY_TURNS * 2) {
       conversationHistory = conversationHistory.slice(-(MAX_HISTORY_TURNS * 2));
     }
 
-    return { reply };
+    return { ok: true };
   } catch (error) {
     console.error("AI Chat Error:", error);
-    return { reply: "Oops! Something went wrong while chatting with me." };
+    return {
+      ok: false,
+      error: "Oops! Something went wrong while chatting with me.",
+    };
   }
 }
