@@ -37,7 +37,7 @@ export default function Home() {
         <div className="flex flex-col items-center justify-center space-y-6 w-full">
           <h1 className="text-4xl font-bold tracking-tight">Abhijeet Kadam</h1>
 
-          <p className="text-xl sm:text-2xl font-mono text-cyan-400">
+          <p className="text-xl sm:text-2xl font-mono text-portfolio-highlight">
             Full Stack AI Engineer · Voice AI · Backend Systems
           </p>
 
@@ -64,7 +64,7 @@ export default function Home() {
             </a>
           </div>
 
-          <p className="font-mono text-xs text-cyan-600/90 dark:text-cyan-400/90 self-start w-full max-w-3xl">
+          <p className="font-mono text-xs text-portfolio-highlight/90 self-start w-full max-w-3xl">
             {"// try typing 'help' below"}
           </p>
 

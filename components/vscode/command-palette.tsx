@@ -1,25 +1,31 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
-import { 
-  Dialog, 
+import { useTheme } from "next-themes"
+import {
+  Dialog,
   DialogContent,
   DialogTitle
 } from "@/components/ui/dialog"
 import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { File, Code, User, Mail, MessageSquare, Info, Palette, Briefcase, Bug, Mic } from "lucide-react"
+import { useColorTheme } from "@/components/color-theme-provider"
+import type { ColorThemeId } from "@/lib/color-themes"
 
-type CommandItem = {
+type CommandItemType = {
   id: string
   name: string
-  path: string
+  path?: string
   icon: React.ReactNode
   section: string
+  /** When set, selecting applies this color theme */
+  colorThemeId?: ColorThemeId
+  /** When set, toggles light/dark via next-themes */
+  setThemeMode?: "light" | "dark"
 }
 
-const commands: CommandItem[] = [
-  // Pages
+const baseCommands: CommandItemType[] = [
   { id: "home", name: "Go to Home", path: "/", icon: <Code className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "about", name: "Go to About", path: "/about", icon: <Info className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "experience", name: "Go to Experience", path: "/about/experience", icon: <Briefcase className="h-4 w-4 mr-2" />, section: "Pages" },
@@ -35,12 +41,10 @@ const commands: CommandItem[] = [
   { id: "voice-agent", name: "Go to Voice Agent", path: "/projects/voice-agent", icon: <Mic className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "contact", name: "Go to Contact", path: "/contact", icon: <Mail className="h-4 w-4 mr-2" />, section: "Pages" },
   { id: "chat", name: "Open Chat", path: "/chat", icon: <MessageSquare className="h-4 w-4 mr-2" />, section: "Pages" },
-  
-  // Theme
-  { id: "dark-theme", name: "Switch to Dark Theme", path: "", icon: <Palette className="h-4 w-4 mr-2" />, section: "Theme" },
-  { id: "light-theme", name: "Switch to Light Theme", path: "", icon: <Palette className="h-4 w-4 mr-2" />, section: "Theme" },
-  
-  // Social Links
+
+  { id: "dark-theme", name: "Switch to Dark Theme", icon: <Palette className="h-4 w-4 mr-2" />, section: "Appearance", setThemeMode: "dark" },
+  { id: "light-theme", name: "Switch to Light Theme", icon: <Palette className="h-4 w-4 mr-2" />, section: "Appearance", setThemeMode: "light" },
+
   { id: "github", name: "Open GitHub", path: "https://github.com/abhijeet8080", icon: <User className="h-4 w-4 mr-2" />, section: "Social" },
   { id: "linkedin", name: "Open LinkedIn", path: "https://linkedin.com/in/abhijeetkadam21", icon: <User className="h-4 w-4 mr-2" />, section: "Social" },
 ]
@@ -52,42 +56,61 @@ interface CommandPaletteProps {
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const router = useRouter()
+  const { setTheme } = useTheme()
+  const { setColorTheme, themesForCurrentMode } = useColorTheme()
   const [search, setSearch] = useState("")
-  const [filteredCommands, setFilteredCommands] = useState<CommandItem[]>(commands)
-  
-  // Filter commands based on search
+
+  const commands = useMemo(() => {
+    const colorCommands: CommandItemType[] = themesForCurrentMode.map((t) => ({
+      id: `color-theme-${t.id}`,
+      name: `Color Theme: ${t.label}`,
+      icon: <Palette className="h-4 w-4 mr-2" />,
+      section: "Color theme",
+      colorThemeId: t.id,
+    }))
+    return [...baseCommands, ...colorCommands]
+  }, [themesForCurrentMode])
+
+  const [filteredCommands, setFilteredCommands] = useState<CommandItemType[]>(commands)
+
   useEffect(() => {
-    const filtered = commands.filter(command => 
+    setFilteredCommands(commands)
+  }, [commands])
+
+  useEffect(() => {
+    const filtered = commands.filter(command =>
       command.name.toLowerCase().includes(search.toLowerCase())
     )
     setFilteredCommands(filtered)
-  }, [search])
-  
-  const handleSelect = (command: CommandItem) => {
-    if (command.path.startsWith("http")) {
+  }, [search, commands])
+
+  const handleSelect = (command: CommandItemType) => {
+    if (command.colorThemeId) {
+      setColorTheme(command.colorThemeId)
+      onOpenChange(false)
+      return
+    }
+    if (command.setThemeMode) {
+      setTheme(command.setThemeMode)
+      onOpenChange(false)
+      return
+    }
+    if (command.path?.startsWith("http")) {
       window.open(command.path, "_blank")
     } else if (command.path) {
       router.push(command.path)
     }
-    
-    if (command.id === "dark-theme") {
-      document.documentElement.classList.add("dark")
-    } else if (command.id === "light-theme") {
-      document.documentElement.classList.remove("dark")
-    }
-    
     onOpenChange(false)
   }
-  
-  // Group commands by section
-  const groupedCommands: Record<string, CommandItem[]> = {}
+
+  const groupedCommands: Record<string, CommandItemType[]> = {}
   filteredCommands.forEach(command => {
     if (!groupedCommands[command.section]) {
       groupedCommands[command.section] = []
     }
     groupedCommands[command.section].push(command)
   })
-  
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden border-border backdrop-blur-lg bg-background/90">
@@ -119,7 +142,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 ))}
               </React.Fragment>
             ))}
-            
+
             {filteredCommands.length === 0 && (
               <div className="px-2 py-6 text-center text-sm text-muted-foreground">
                 No commands found.
@@ -130,4 +153,4 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       </DialogContent>
     </Dialog>
   )
-} 
+}

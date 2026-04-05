@@ -68,7 +68,7 @@ export function VSCodeLayout({ children }: VSCodeLayoutProps) {
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0 }}
-              className="absolute left-14 top-16 z-50 bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs font-mono px-3 py-2 rounded-md shadow-lg pointer-events-none"
+              className="absolute left-14 top-16 z-50 text-xs font-mono px-3 py-2 rounded-md shadow-lg pointer-events-none border bg-[color:var(--hint-bg)] border-[color:var(--hint-border)] text-[color:var(--hint-fg)]"
             >
               ← explore from here
             </motion.div>
