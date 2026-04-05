@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useMemo } from "react"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import {
   Dialog,
@@ -9,10 +9,16 @@ import {
   DialogTitle
 } from "@/components/ui/dialog"
 import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { File, Code, User, Mail, MessageSquare, Info, Palette, Briefcase, Bug, Mic } from "lucide-react"
+import { File, Code, User, Mail, MessageSquare, Info, Palette, Briefcase, Bug, Mic, Sparkles } from "lucide-react"
 import { useColorTheme } from "@/components/color-theme-provider"
 import type { ColorThemeId } from "@/lib/color-themes"
 import { RESUME_PDF_HREF } from "@/lib/site"
+import {
+  EASTER_EGG_EVENT,
+  EASTER_EGG_ID_TO_COMMAND,
+  EASTER_EGG_PALETTE,
+  PENDING_TERMINAL_CMD_KEY,
+} from "@/lib/easterEggs"
 
 type CommandItemType = {
   id: string
@@ -24,6 +30,8 @@ type CommandItemType = {
   colorThemeId?: ColorThemeId
   /** When set, toggles light/dark via next-themes */
   setThemeMode?: "light" | "dark"
+  /** Runs command in the home terminal (see lib/easterEggs.ts) */
+  easterEggId?: string
 }
 
 const baseCommands: CommandItemType[] = [
@@ -50,6 +58,14 @@ const baseCommands: CommandItemType[] = [
   { id: "linkedin", name: "Open LinkedIn", path: "https://linkedin.com/in/abhijeetkadam21", icon: <User className="h-4 w-4 mr-2" />, section: "Social" },
 ]
 
+const easterEggCommands: CommandItemType[] = EASTER_EGG_PALETTE.map((p) => ({
+  id: p.id,
+  name: p.name,
+  section: p.section,
+  icon: <Sparkles className="h-4 w-4 mr-2 opacity-90" />,
+  easterEggId: p.id,
+}))
+
 interface CommandPaletteProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -57,6 +73,7 @@ interface CommandPaletteProps {
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const { setTheme } = useTheme()
   const { setColorTheme, themesForCurrentMode } = useColorTheme()
   const [search, setSearch] = useState("")
@@ -69,7 +86,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       section: "Color theme",
       colorThemeId: t.id,
     }))
-    return [...baseCommands, ...colorCommands]
+    return [...baseCommands, ...easterEggCommands, ...colorCommands]
   }, [themesForCurrentMode])
 
   const [filteredCommands, setFilteredCommands] = useState<CommandItemType[]>(commands)
@@ -86,6 +103,21 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   }, [search, commands])
 
   const handleSelect = (command: CommandItemType) => {
+    if (command.easterEggId) {
+      const cmd = EASTER_EGG_ID_TO_COMMAND[command.easterEggId]
+      if (cmd) {
+        if (pathname === "/") {
+          window.dispatchEvent(
+            new CustomEvent(EASTER_EGG_EVENT, { detail: { command: cmd } })
+          )
+        } else {
+          sessionStorage.setItem(PENDING_TERMINAL_CMD_KEY, cmd)
+          router.push("/")
+        }
+      }
+      onOpenChange(false)
+      return
+    }
     if (command.colorThemeId) {
       setColorTheme(command.colorThemeId)
       onOpenChange(false)
@@ -126,7 +158,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             value={search}
             className="h-12"
           />
-          <CommandList className="max-h-[300px]">
+          <CommandList className="max-h-[min(420px,70vh)]">
             {Object.entries(groupedCommands).map(([section, items]) => (
               <React.Fragment key={section}>
                 <div className="px-2 py-1.5 text-xs text-muted-foreground">

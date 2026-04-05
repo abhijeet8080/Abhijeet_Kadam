@@ -11,10 +11,20 @@ interface VSCodeLayoutProps {
   children: React.ReactNode
 }
 
+/**
+ * Lucide icons render <svg> in the activity bar; extensions (e.g. Dark Reader) inject
+ * attributes into SVGs before React hydrates, causing server/client HTML mismatches.
+ * We render a chrome skeleton on SSR + first client paint, then mount full UI after hydration.
+ */
 export function VSCodeLayout({ children }: VSCodeLayoutProps) {
+  const [shellReady, setShellReady] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
   const [showHint, setShowHint] = useState(false)
+
+  useEffect(() => {
+    setShellReady(true)
+  }, [])
 
   // Check viewport size on mount and when window resizes
   useEffect(() => {
@@ -51,6 +61,24 @@ export function VSCodeLayout({ children }: VSCodeLayoutProps) {
     }, 4000)
     return () => clearTimeout(t)
   }, [isMobile])
+
+  if (!shellReady) {
+    return (
+      <div className="flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground">
+        <div className="relative flex flex-1 overflow-hidden">
+          <div
+            className="w-12 h-full shrink-0 bg-muted border-r border-border"
+            aria-hidden
+          />
+          <div className="flex flex-col flex-1 overflow-hidden min-w-0">
+            <div className="h-9 shrink-0 bg-background border-b border-border" aria-hidden />
+            <div className="flex-1 overflow-auto">{children}</div>
+          </div>
+        </div>
+        <div className="h-6 shrink-0 bg-muted border-t border-border" aria-hidden />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground">
