@@ -8,6 +8,8 @@ import { CommandPalette } from "@/components/vscode/command-palette"
 import { Button } from "@/components/ui/button"
 import { VSCodeLogoIcon } from "@/components/icons/vscode-logo"
 import { KeyboardEvent } from "react"
+import { FileText } from "lucide-react"
+import { RESUME_PDF_HREF } from "@/lib/site"
 
 export default function Home() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
@@ -52,6 +54,12 @@ export default function Home() {
             </Button>
             <Button variant="outline" size="sm" asChild>
               <Link href="/contact">Get in Touch</Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <a href={RESUME_PDF_HREF} target="_blank" rel="noopener noreferrer">
+                <FileText className="mr-2 h-4 w-4" />
+                Resume
+              </a>
             </Button>
             <a
               href="https://github.dev/abhijeet8080/Abhijeet_Kadam"

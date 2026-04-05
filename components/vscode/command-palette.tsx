@@ -12,6 +12,7 @@ import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui
 import { File, Code, User, Mail, MessageSquare, Info, Palette, Briefcase, Bug, Mic } from "lucide-react"
 import { useColorTheme } from "@/components/color-theme-provider"
 import type { ColorThemeId } from "@/lib/color-themes"
+import { RESUME_PDF_HREF } from "@/lib/site"
 
 type CommandItemType = {
   id: string
@@ -33,7 +34,7 @@ const baseCommands: CommandItemType[] = [
   {
     id: "resume",
     name: "Download Resume",
-    path: "/resume.pdf",
+    path: RESUME_PDF_HREF,
     icon: <File className="h-4 w-4 mr-2" />,
     section: "Pages",
   },
@@ -96,7 +97,10 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       return
     }
     if (command.path?.startsWith("http")) {
-      window.open(command.path, "_blank")
+      window.open(command.path, "_blank", "noopener,noreferrer")
+    } else if (command.path?.toLowerCase().endsWith(".pdf")) {
+      /* Static PDF in /public — full navigation, not client route transition */
+      window.open(command.path, "_blank", "noopener,noreferrer")
     } else if (command.path) {
       router.push(command.path)
     }

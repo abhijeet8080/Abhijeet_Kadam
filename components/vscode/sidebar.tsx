@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { ChevronDown, ChevronRight, File } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
+import { RESUME_PDF_HREF } from "@/lib/site"
 
 type FileItem = {
   id: string
@@ -45,6 +46,13 @@ const files: FileItem[] = [
         type: "file",
         path: "/about/experience",
         icon: <File className="h-4 w-4 text-cyan-400" />
+      },
+      {
+        id: "resume",
+        name: "Abhijeet.pdf",
+        type: "file",
+        path: RESUME_PDF_HREF,
+        icon: <File className="h-4 w-4 text-rose-400" />
       },
     ]
   },
@@ -136,7 +144,11 @@ const FileItemComponent = ({ item, level = 0 }: FileItemProps) => {
     if (item.type === "folder") {
       setIsOpen(!isOpen)
     } else if (item.path) {
-      router.push(item.path)
+      if (item.path.toLowerCase().endsWith(".pdf")) {
+        window.open(item.path, "_blank", "noopener,noreferrer")
+      } else {
+        router.push(item.path)
+      }
     }
   }
   
